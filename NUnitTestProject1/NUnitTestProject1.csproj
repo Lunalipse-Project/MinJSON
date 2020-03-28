@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="test\test1.json" />
+    <None Remove="test\test2.json" />
+    <None Remove="test\test3.json" />
+    <None Remove="test\test4.json" />
+    <None Remove="test\test5.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="test\test1.json" />
+    <Content Include="test\test2.json" />
+    <Content Include="test\test3.json" />
+    <Content Include="test\test4.json" />
+    <Content Include="test\test5.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="nunit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MinJSON\MinJSON.csproj" />
+  </ItemGroup>
+
+</Project>
