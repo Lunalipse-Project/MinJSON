@@ -46,15 +46,19 @@ namespace MinJSON.Parser
 
         private IDFAInputConsumer<Token> inputConsumer;
 
+        private TransitionTable<Token> transitions = new TransitionTable<Token>(7);
+        private int[] accepting = new[] { ACCEPT };
+
         public ParserConfig(IDFAInputConsumer<Token> inputConsumer)
         {
             writer = new JSONSeqentialWriter();
             this.inputConsumer = inputConsumer;
+            buildTransitions();
         }
 
         public int[] GetAcceptingStates()
         {
-            return new int[] { ACCEPT };
+            return accepting;
         }
 
         public IDFAInputConsumer<Token> GetInputConsumer()
@@ -74,61 +78,6 @@ namespace MinJSON.Parser
 
         public TransitionTable<Token> GetTransitionFunctions()
         {
-            TransitionTable<Token> transitions = new TransitionTable<Token>(7);
-            transitions.Add(new TransitionFunction<Token>(START, OBJECT, (i, s)=>{
-                return doBracePush(i, s);
-            }));
-		
-		    transitions.Add(new TransitionFunction<Token>(START, JVALUE, (i, s)=>{
-			    return doSquareBracketPush(i, s);
-            }));
-		
-		    transitions.Add(new TransitionFunction<Token>(OBJECT, JNAME, (i, s)=>{
-			    return i.Type.Equals(TokenType.STRING);
-            }));
-		
-		    transitions.Add(new TransitionFunction<Token>(OBJECT, CLOSE, (i, s)=>{
-			    return doBracePop(i, s);
-		    }));
-		
-		    transitions.Add(new TransitionFunction<Token>(JNAME, JVALUE, (i, s)=>{
-			    return i.Type.Equals(TokenType.COLON);
-		    }));
-		
-		    transitions.Add(new TransitionFunction<Token>(JVALUE, JVALUE, (i, s)=>{
-			    return doSquareBracketPush(i, s);
-		    }));
-		
-		    transitions.Add(new TransitionFunction<Token>(JVALUE, OBJECT, (i, s)=>{
-			    return doBracePush(i, s);
-		    }));
-		
-		    transitions.Add(new TransitionFunction<Token>(JVALUE, CLOSE, (i, s)=>{
-			    return doSquareBracketPop(i, s);
-		    }));
-		
-		    transitions.Add(new TransitionFunction<Token>(JVALUE, PVALUE, (i, s)=>{
-			    return getValueTransition(i);
-		    }));
-		
-		    transitions.Add(new TransitionFunction<Token>(PVALUE, JVALUE, (i, s)=>{
-			    return i.Type.Equals(TokenType.COMMA) &&
-				       isStackTopEquals(TokenType.LSQUARE, s);
-		    }));
-		
-		    transitions.Add(new TransitionFunction<Token>(PVALUE, OBJECT, (i, s)=>{
-			    return i.Type.Equals(TokenType.COMMA) &&
-				       isStackTopEquals(TokenType.LBRACE, s);
-		    }));
-		
-		    transitions.Add(new TransitionFunction<Token>(PVALUE, CLOSE, (i, s)=>{
-                if(!doBracePop(i, s))
-                {
-                    return doSquareBracketPop(i, s);
-                }
-                return true;
-		    }));
-		
 		    return transitions;
         }
 
@@ -260,6 +209,64 @@ namespace MinJSON.Parser
         public void Reset()
         {
             writer.Reset();
+        }
+
+        private void buildTransitions()
+        {
+
+            transitions.Add(new TransitionFunction<Token>(START, OBJECT, (i, s) => {
+                return doBracePush(i, s);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(START, JVALUE, (i, s) => {
+                return doSquareBracketPush(i, s);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(OBJECT, JNAME, (i, s) => {
+                return i.Type.Equals(TokenType.STRING);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(OBJECT, CLOSE, (i, s) => {
+                return doBracePop(i, s);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(JNAME, JVALUE, (i, s) => {
+                return i.Type.Equals(TokenType.COLON);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(JVALUE, JVALUE, (i, s) => {
+                return doSquareBracketPush(i, s);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(JVALUE, OBJECT, (i, s) => {
+                return doBracePush(i, s);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(JVALUE, CLOSE, (i, s) => {
+                return doSquareBracketPop(i, s);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(JVALUE, PVALUE, (i, s) => {
+                return getValueTransition(i);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(PVALUE, JVALUE, (i, s) => {
+                return i.Type.Equals(TokenType.COMMA) &&
+                       isStackTopEquals(TokenType.LSQUARE, s);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(PVALUE, OBJECT, (i, s) => {
+                return i.Type.Equals(TokenType.COMMA) &&
+                       isStackTopEquals(TokenType.LBRACE, s);
+            }));
+
+            transitions.Add(new TransitionFunction<Token>(PVALUE, CLOSE, (i, s) => {
+                if (!doBracePop(i, s))
+                {
+                    return doSquareBracketPop(i, s);
+                }
+                return true;
+            }));
         }
     }
 }
