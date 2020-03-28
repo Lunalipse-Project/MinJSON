@@ -29,14 +29,12 @@ namespace MinJSON.PDA
 
         public TransitionFunction<T> Get(int origin, T input, Stack<T> opt_stack)
         {
-            for(int i = 0; i < table.GetLength(0); i++)
+            int len = table.GetLength(0);
+            for (int i = 0; i < len; i++)
             {
-                if (table[origin, i] != null)
+                if (table[origin, i] != null && table[origin, i].canTransit(origin, input, opt_stack))
                 {
-                    if (table[origin, i].canTransit(origin, input, opt_stack))
-                    {
-                        return table[origin, i];
-                    }
+                    return table[origin, i];
                 }
             }
             return null;

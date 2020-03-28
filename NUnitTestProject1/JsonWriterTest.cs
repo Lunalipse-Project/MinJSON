@@ -6,33 +6,34 @@ namespace Tests
 {
     public class Tests
     {
+        ISeqentialWriter writer;
         [SetUp]
         public void Setup()
         {
+            writer = new JsonTextWriter();
         }
 
         [Test]
         public void Empty()
         {
-            JSONSeqentialWriter writer = new JSONSeqentialWriter();
             writer.WriteObjectBegin();
             writer.WriteObjectEnd();
             Console.WriteLine(writer);
+            writer.WriterReset();
         }
 
         [Test]
         public void EmptyArray()
         {
-            JSONSeqentialWriter writer = new JSONSeqentialWriter();
             writer.WriteArrayBegin();
             writer.WriteArrayEnd();
             Console.WriteLine(writer);
+            writer.WriterReset();
         }
 
         [Test]
         public void Test1()
         {
-            JSONSeqentialWriter writer = new JSONSeqentialWriter();
             writer.WriteObjectBegin();
             writer.WriteProperty("a1");
             writer.WriteLong(1232231L);
@@ -44,11 +45,11 @@ namespace Tests
             writer.WriteBoolean(false);
             writer.WriteObjectEnd();
             Console.WriteLine(writer);
+            writer.WriterReset();
         }
         [Test]
         public void TestNested()
         {
-            JSONSeqentialWriter writer = new JSONSeqentialWriter();
             writer.WriteObjectBegin();
             writer.WriteProperty("a1");
             writer.WriteLong(1232231L);
@@ -60,12 +61,13 @@ namespace Tests
             writer.WriteArrayEnd();
             writer.WriteObjectEnd();
             Console.WriteLine(writer);
+            writer.WriterReset();
         }
 
         [Test]
         public void TestNestedArrayObject()
         {
-            JSONSeqentialWriter writer = new JSONSeqentialWriter();
+            JsonSeqentialWriter writer = new JsonSeqentialWriter();
             writer.WriteObjectBegin();
             writer.WriteProperty("a4");
             writer.WriteArrayBegin();
@@ -81,6 +83,7 @@ namespace Tests
             writer.WriteArrayEnd();
             writer.WriteObjectEnd();
             Console.WriteLine(writer);
+            writer.WriterReset();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace MinJSON.Serialization
 {
     public interface IJsonKeyConverter
     {
-        string ConvertTo(object key);
-        object ConvertFrom(string propertyKey);
+        string ConvertTo(object key, Type objectType);
+        object ConvertFrom(string propertyKey, Type targetType);
     }
 }

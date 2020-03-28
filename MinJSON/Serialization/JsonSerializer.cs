@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace MinJSON.Serialization
@@ -16,11 +17,11 @@ namespace MinJSON.Serialization
 
         private JsonValue pack(object instance, JsonPropertyAttribute propertyAttribute, Type instance_type)
         {
-            if (instance_type.IsPrimitive || instance_type.Equals(typeof(string)))
+            if (instance_type.isPrimitiveValue())
             {
                 return serializePrimitive(instance, propertyAttribute, instance_type);
             }
-            else if (Utils.isDictionaryLike(instance_type))
+            else if (instance_type.isDictionaryLike())
             {
                 Type key = instance_type.GetGenericArguments()[0];
                 Type value = instance_type.GetGenericArguments()[1];
@@ -30,9 +31,9 @@ namespace MinJSON.Serialization
             {
                 return serializeElement(instance as Array, propertyAttribute, instance_type.GetElementType());
             }
-            else if (Utils.isEnumerable(instance_type))
+            else if (instance_type.isListLike())
             {
-                return serializeElement(instance as IEnumerable, propertyAttribute, instance_type.GetGenericArguments()[0]);
+                return serializeElement(instance as IList, propertyAttribute, instance_type.GetGenericArguments()[0]);
             } 
             else
             {
@@ -43,6 +44,10 @@ namespace MinJSON.Serialization
         private JsonObject serializeClass(object instance, Type classType)
         {
             JsonObject jsonValue = new JsonObject();
+            if (classType.GetCustomAttribute(typeof(JsonSerializable)) == null)
+            {
+                throw new SerializationException("Can not serialize a non-serializable class.");
+            }
             foreach (FieldInfo member in classType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
             {
                 if(member.IsPublic || member.GetCustomAttribute(typeof(JsonPropertyAttribute)) != null)
@@ -69,7 +74,7 @@ namespace MinJSON.Serialization
                 string key;
                 if(propertyAttribute!=null && propertyAttribute.KeyConverter != null)
                 {
-                    key = propertyAttribute.KeyConverter.ConvertTo(entry.Key);
+                    key = propertyAttribute.KeyConverter.ConvertTo(entry.Key, keyType);
                 }
                 else if (keyType.Equals(typeof(string)))
                 {
@@ -82,7 +87,7 @@ namespace MinJSON.Serialization
 
                 if (propertyAttribute != null && propertyAttribute.ValueConverter != null)
                 {
-                    value = propertyAttribute.ValueConverter.ConvertTo(entry.Value);
+                    value = propertyAttribute.ValueConverter.ConvertTo(entry.Value, valueType);
                 }
                 else
                 {
@@ -93,16 +98,16 @@ namespace MinJSON.Serialization
             return jo;
         }
 
-        private JsonArray serializeElement(IEnumerable instance, JsonPropertyAttribute propertyAttribute, Type elementType)
+        private JsonArray serializeElement(IList instance, JsonPropertyAttribute propertyAttribute, Type elementType)
         {
             JsonArray jsonValue = new JsonArray();
-            if (!elementType.IsPrimitive || elementType.Equals(typeof(string)))
+            if (!elementType.isPrimitiveValue())
             {
                 foreach (object obj in instance)
                 {
                     if (propertyAttribute != null && propertyAttribute.ValueConverter != null)
                     {
-                        jsonValue.AddValue(propertyAttribute.ValueConverter.ConvertTo(obj));
+                        jsonValue.AddValue(propertyAttribute.ValueConverter.ConvertTo(obj, elementType));
                     }
                     else
                     {
@@ -116,7 +121,7 @@ namespace MinJSON.Serialization
                 {
                     if (propertyAttribute != null && propertyAttribute.ValueConverter != null)
                     {
-                        jsonValue.AddValue(propertyAttribute.ValueConverter.ConvertTo(obj));
+                        jsonValue.AddValue(propertyAttribute.ValueConverter.ConvertTo(obj, elementType));
                     }
                     else
                     {
@@ -135,7 +140,7 @@ namespace MinJSON.Serialization
             }
             if(propertyAttribute!=null && propertyAttribute.ValueConverter != null)
             {
-                return propertyAttribute.ValueConverter.ConvertTo(instance);
+                return propertyAttribute.ValueConverter.ConvertTo(instance, primitiveType);
             }
             if(Utils.isNumeric(primitiveType))
             {

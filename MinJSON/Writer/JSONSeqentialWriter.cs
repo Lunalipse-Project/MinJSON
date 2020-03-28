@@ -6,11 +6,11 @@ using System.Text;
 
 namespace MinJSON.Writer
 {
-    public class JSONSeqentialWriter
+    public class JsonSeqentialWriter : ISeqentialWriter
     {
         Stack<JsonContext> contexts;
 
-        public JSONSeqentialWriter()
+        public JsonSeqentialWriter()
         {
             contexts = new Stack<JsonContext>();
         }
@@ -97,19 +97,6 @@ namespace MinJSON.Writer
         }
         public void WriteObjectEnd()
         {
-            //JsonObject jsonObject = new JsonObject();
-            //JsonContext context = null;
-            //while(!isEmpty() && ((context = contexts.Pop()).IsMarked() || !context.GetValue().isObject))
-            //{
-            //    if(context.IsKVPair())
-            //    {
-            //        jsonObject.AddValuePair(context.GetKey(), context.GetValue());
-            //    }
-            //    else
-            //    {
-            //        throw new JsonWriterException("An object can only contains json property (a name/value pair).");
-            //    }
-            //}
             JsonContext context = contexts.Pop();
             if (!context.GetValue().isObject)
             {
@@ -124,19 +111,6 @@ namespace MinJSON.Writer
         }
         public void WriteArrayEnd()
         {
-            //JsonArray jsonArray = new JsonArray();
-            //JsonContext context = null;
-            //while (!isEmpty() && ((context = contexts.Pop()).IsMarked() || !context.GetValue().isArray))
-            //{
-            //    if (!context.IsKVPair())
-            //    {
-            //        jsonArray.AddValue(context.GetValue());
-            //    }
-            //    else
-            //    {
-            //        throw new JsonWriterException("An array can only contains json value.");
-            //    }
-            //}
             JsonContext context = contexts.Pop();
             if (!context.GetValue().isArray)
             {
@@ -165,7 +139,7 @@ namespace MinJSON.Writer
             return ToJsonValue().ToString();
         }
 
-        public void Reset()
+        public void WriterReset()
         {
             contexts.Clear();
         }

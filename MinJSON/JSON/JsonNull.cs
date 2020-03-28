@@ -21,5 +21,8 @@ namespace MinJSON.JSON
         {
             throw new JsonValueConversionException($"Unable to convert null to type '{type.Name}'");
         }
+
+        public override object Value => null;
+
     }
 }

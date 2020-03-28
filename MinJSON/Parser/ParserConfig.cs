@@ -3,6 +3,7 @@ using MinJSON.Parser.Tokens;
 using MinJSON.PDA;
 using MinJSON.Writer;
 using System.Collections.Generic;
+using System.Globalization;
 
 /* 
  * BNF for JSON
@@ -34,7 +35,7 @@ namespace MinJSON.Parser
 {
     public class ParserConfig : IDFAConfiguration<Token, JsonValue>
     {
-        JSONSeqentialWriter writer;
+        ISeqentialWriter writer;
 
         private const int START = 0;
         private const int OBJECT = 1;
@@ -51,7 +52,7 @@ namespace MinJSON.Parser
 
         public ParserConfig(IDFAInputConsumer<Token> inputConsumer)
         {
-            writer = new JSONSeqentialWriter();
+            writer = new JsonSeqentialWriter();
             this.inputConsumer = inputConsumer;
             buildTransitions();
         }
@@ -189,7 +190,10 @@ namespace MinJSON.Parser
                     switch (currentType)
                     {
                         case TokenType.NUMBER:
-                            writer.WriteDecimal(decimal.Parse(currentTokenContent));
+                            writer.WriteDecimal(
+                                decimal.Parse(currentTokenContent, 
+                                        NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign)
+                                );
                             break;
                         case TokenType.BOOLEAN:
                             writer.WriteBoolean(bool.Parse(currentTokenContent));
@@ -208,7 +212,7 @@ namespace MinJSON.Parser
 
         public void Reset()
         {
-            writer.Reset();
+            writer.WriterReset();
         }
 
         private void buildTransitions()

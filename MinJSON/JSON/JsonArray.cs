@@ -72,7 +72,7 @@ namespace MinJSON.JSON
                 }
                 return array;
             }
-            else if (Utils.isEnumerable(type))
+            else if (Utils.isListLike(type))
             {
                 Type t = type.GetGenericArguments()[0];
                 IList list = (IList)Activator.CreateInstance(t);

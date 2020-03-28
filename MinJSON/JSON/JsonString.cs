@@ -23,5 +23,8 @@ namespace MinJSON.JSON
             }
             return null;
         }
+
+        public override object Value => value;
+
     }
 }

@@ -25,10 +25,10 @@ namespace MinJSON.PDA
 
         public bool canTransit(int currentState, T input, Stack<T> operatingStack)
         {
-            if(this.currentState != currentState)
-            {
-                return false;
-            }
+            //if(this.currentState != currentState)
+            //{
+            //    return false;
+            //}
             return predicate.Invoke(input, operatingStack);
         }
 

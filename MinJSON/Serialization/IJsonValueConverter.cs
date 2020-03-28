@@ -7,7 +7,7 @@ namespace MinJSON.Serialization
 {
     public interface IJsonValueConverter
     {
-        JsonValue ConvertTo(object obj);
-        object ConvertFromJson(JsonValue jsonValue);
+        JsonValue ConvertTo(object obj, Type objectType);
+        object ConvertFromJson(JsonValue jsonValue, Type targetType);
     }
 }

@@ -3,18 +3,23 @@ using System.Collections;
 
 namespace MinJSON
 {
-    public class Utils
+    public static class Utils
     {
-        public static bool isDictionaryLike(Type t)
+        public static bool isDictionaryLike(this Type t)
         {
             return t.GetInterface(nameof(IDictionary)) != null;
         }
-        public static bool isEnumerable(Type t)
+        public static bool isListLike(this Type t)
         {
-            return t.GetInterface(nameof(IEnumerable)) != null;
+            return t.GetInterface(nameof(IList)) != null;
         }
 
-        public static bool isNumeric(Type t)
+        public static bool isPrimitiveValue(this Type t)
+        {
+            return t.IsPrimitive || t.Equals(typeof(String));
+        }
+
+        public static bool isNumeric(this Type t)
         {
             switch(Type.GetTypeCode(t))
             {

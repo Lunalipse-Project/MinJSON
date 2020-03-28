@@ -1,4 +1,5 @@
-﻿using MinJSON.Serialization;
+﻿using MinJSON.JSON;
+using MinJSON.Serialization;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,29 @@ namespace NUnitTestProject1
             JsonSerializer<Simple> serializer = new JsonSerializer<Simple>();
             Console.WriteLine(serializer.Pack(simp));
         }
+
+
+        [Test]
+        public void TestDeserializeSimplePOCO()
+        {
+            const string json = "{\"abc\":-2.23e3,\"ced\":\"my field\",\"list\":[{\"aa\":\"bbb\",\"a\":2},{\"aa\":\"bbb\",\"a\":4},{\"aa\":\"bbb\",\"a\":6},{\"aa\":\"bbb\",\"a\":43}]}";
+            JsonDeserializer<DesSample> deserializer = new JsonDeserializer<DesSample>();
+            DesSample desSample = deserializer.Unpack(JsonObject.Parse(json));
+            Assert.AreEqual(desSample.abc, -2230);
+            Assert.AreEqual(desSample.ced, "my field");
+        }
     }
 
+    [JsonSerializable]
+    class DesSample
+    {
+        public int abc;
+        public string ced;
+        [JsonProperty(PropertyName ="list")]
+        private List<Simple3> simple3s;
+    }
+
+    [JsonSerializable]
     class Simple
     {
         public int field1 = 23;
@@ -30,6 +52,7 @@ namespace NUnitTestProject1
         public Simple2 simple = new Simple2("aanbcd");
     }
 
+    [JsonSerializable("my_ctor_value")]
     class Simple2
     {
         public int[] abc = new[] { 1, 2, 3, 4, 5, 6 };
@@ -47,11 +70,12 @@ namespace NUnitTestProject1
         }
     }
 
+    [JsonSerializable(0)]
     class Simple3
     {
         string privateStuff = "pppp";
         [JsonProperty(PropertyName = "aa")]
-        string privateButVisible = "bbb";
+        string privateButVisible = "";
         public int a = 0;
         public Simple3(int b)
         {

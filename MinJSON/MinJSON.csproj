@@ -13,4 +13,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Serialization\Converter\" />
+  </ItemGroup>
+
 </Project>

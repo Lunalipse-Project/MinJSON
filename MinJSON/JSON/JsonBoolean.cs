@@ -30,5 +30,7 @@ namespace MinJSON.JSON
             }
             throw new JsonValueConversionException($"Unable to convert JSON boolean to type '{type.Name}'");
         }
+
+        public override object Value => value;
     }
 }

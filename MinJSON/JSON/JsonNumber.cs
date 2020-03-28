@@ -34,5 +34,8 @@ namespace MinJSON.JSON
                     e);
             }
         }
+
+        public override object Value => number;
+
     }
 }
