@@ -34,7 +34,7 @@ namespace NUnitTestProject1
     {
         public int abc;
         public string ced;
-        [JsonProperty(PropertyName ="list")]
+        [JsonProperty("list")]
         private List<Simple3> simple3s;
     }
 
@@ -48,7 +48,7 @@ namespace NUnitTestProject1
             {"er",new Simple2("jdcdnd") },
             {"eb",new Simple2("scdfkds") }
         };
-        [JsonProperty(PropertyName = "simpleClass")]
+        [JsonProperty("simpleClass")]
         public Simple2 simple = new Simple2("aanbcd");
     }
 
@@ -74,7 +74,7 @@ namespace NUnitTestProject1
     class Simple3
     {
         string privateStuff = "pppp";
-        [JsonProperty(PropertyName = "aa")]
+        [JsonProperty("aa")]
         string privateButVisible = "";
         public int a = 0;
         public Simple3(int b)

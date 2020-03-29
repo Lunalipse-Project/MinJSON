@@ -53,14 +53,14 @@ namespace Test
     {
         public int abc;
         public string ced;
-        [JsonProperty(PropertyName = "list")]
+        [JsonProperty("list")]
         private List<Simple3> simple3s;
     }
     [JsonSerializable(0)]
     class Simple3
     {
         string privateStuff = "pppp";
-        [JsonProperty(PropertyName = "aa")]
+        [JsonProperty("aa")]
         string privateButVisible = "";
         public int a = 0;
         public Simple3(int b)

@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E890B241-AB0D-4506-91A5-9A9292DA2AAD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MinJson</RootNamespace>
+    <AssemblyName>MinJson</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Lunaxisky.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Exception\JsonLexerException.cs" />
+    <Compile Include="Exception\JsonParserException.cs" />
+    <Compile Include="Exception\JsonSerializationException.cs" />
+    <Compile Include="Exception\JsonValueConversionException.cs" />
+    <Compile Include="Exception\JsonWriterException.cs" />
+    <Compile Include="JSON\JsonArray.cs" />
+    <Compile Include="JSON\JsonBoolean.cs" />
+    <Compile Include="JSON\JsonNull.cs" />
+    <Compile Include="JSON\JsonNumber.cs" />
+    <Compile Include="JSON\JsonObject.cs" />
+    <Compile Include="JSON\JsonString.cs" />
+    <Compile Include="JSON\JsonValue.cs" />
+    <Compile Include="JSON\JsonValueType.cs" />
+    <Compile Include="Parser\CharacterInputConsumer.cs" />
+    <Compile Include="Parser\CharacterStreamInputConsumer.cs" />
+    <Compile Include="Parser\JsonParser.cs" />
+    <Compile Include="Parser\Lexer\BooleanMatcher.cs" />
+    <Compile Include="Parser\Lexer\JsonLexer.cs" />
+    <Compile Include="Parser\Lexer\NullMatcher.cs" />
+    <Compile Include="Parser\Lexer\NumberMatcher.cs" />
+    <Compile Include="Parser\Lexer\StringMatcher.cs" />
+    <Compile Include="Parser\ParserConfig.cs" />
+    <Compile Include="Parser\Tokens\Token.cs" />
+    <Compile Include="Parser\Tokens\TokenType.cs" />
+    <Compile Include="PDA\IDFAConfiguration.cs" />
+    <Compile Include="PDA\IDFAInputConsumer.cs" />
+    <Compile Include="PDA\PDA.cs" />
+    <Compile Include="PDA\PDAException.cs" />
+    <Compile Include="PDA\TransitionFunction.cs" />
+    <Compile Include="PDA\TransitionTable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\Converter\IntEnumConverter.cs" />
+    <Compile Include="Serialization\Converter\StringEnumConverter.cs" />
+    <Compile Include="Serialization\IJsonKeyConverter.cs" />
+    <Compile Include="Serialization\IJsonValueConverter.cs" />
+    <Compile Include="Serialization\JsonConversion.cs" />
+    <Compile Include="Serialization\JsonDeserializer.cs" />
+    <Compile Include="Serialization\JsonNotSerialize.cs" />
+    <Compile Include="Serialization\JsonPropertyAttribute.cs" />
+    <Compile Include="Serialization\JsonSerializable.cs" />
+    <Compile Include="Serialization\JsonSerializer.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Writer\ISeqentialWriter.cs" />
+    <Compile Include="Writer\JsonContext.cs" />
+    <Compile Include="Writer\JSONSeqentialWriter.cs" />
+    <Compile Include="Writer\JsonTextWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lunaxisky.pfx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

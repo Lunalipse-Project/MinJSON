@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MinJSON\MinJSON.csproj" />
+    <ProjectReference Include="..\MinJsonNetFramework\MinJsonNetFramework.csproj" />
   </ItemGroup>
 
 </Project>

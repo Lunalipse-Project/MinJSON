@@ -42,7 +42,7 @@ namespace NUnitTestProject1
         [Test]
         public void TestParserLarge()
         {
-            using (FileStream fs = new FileStream(@"C:\Users\minec\Desktop\p100000.json", FileMode.Open))
+            using (FileStream fs = new FileStream(@"C:\Users\minec\Desktop\immu.json", FileMode.Open))
             {
                 JsonLexer lexer = new JsonLexer(fs);
                 JsonParser jsonParser = new JsonParser(lexer);

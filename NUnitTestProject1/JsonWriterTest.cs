@@ -67,19 +67,30 @@ namespace Tests
         [Test]
         public void TestNestedArrayObject()
         {
-            JsonSeqentialWriter writer = new JsonSeqentialWriter();
             writer.WriteObjectBegin();
             writer.WriteProperty("a4");
             writer.WriteArrayBegin();
-            writer.WriteInteger(2);
-            writer.WriteInteger(3);
             writer.WriteObjectBegin();
             writer.WriteProperty("B4");
             writer.WriteInteger(23);
             writer.WriteProperty("B3");
             writer.WriteBoolean(false);
             writer.WriteObjectEnd();
-            writer.WriteString("2333");
+            writer.WriteObjectBegin();
+            writer.WriteProperty("B4");
+            writer.WriteInteger(23);
+            writer.WriteProperty("B3");
+            writer.WriteBoolean(false);
+            writer.WriteObjectEnd();
+            writer.WriteObjectBegin();
+            writer.WriteProperty("B4");
+            writer.WriteArrayBegin();
+            writer.WriteSingle(2);
+            writer.WriteString("e\\b\\c");
+            writer.WriteArrayEnd();
+            writer.WriteProperty("B3");
+            writer.WriteString(@"e\\v\\s");
+            writer.WriteObjectEnd();
             writer.WriteArrayEnd();
             writer.WriteObjectEnd();
             Console.WriteLine(writer);
